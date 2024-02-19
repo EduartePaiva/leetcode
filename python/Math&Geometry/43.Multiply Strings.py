@@ -21,8 +21,6 @@ class Solution:
             res[i].reverse()
 
         #sum everything
-        for v in res:
-            print(v)
         left = 0
         allSum = []
         while res:
