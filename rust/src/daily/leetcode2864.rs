@@ -21,14 +21,18 @@ impl Solution {
     }
 }
 
-#[test]
-fn maximum_odd_binary_number() {
-    assert_eq!(
-        Solution::maximum_odd_binary_number(String::from("010"),),
-        String::from("001")
-    );
-    assert_eq!(
-        Solution::maximum_odd_binary_number(String::from("0101"),),
-        String::from("1001")
-    );
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn maximum_odd_binary_number() {
+        assert_eq!(
+            Solution::maximum_odd_binary_number(String::from("010"),),
+            String::from("001")
+        );
+        assert_eq!(
+            Solution::maximum_odd_binary_number(String::from("0101"),),
+            String::from("1001")
+        );
+    }
 }
