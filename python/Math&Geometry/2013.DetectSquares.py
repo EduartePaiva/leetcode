@@ -4,14 +4,11 @@ class DetectSquares:
 
     def __init__(self):
         self.pointsCnt = defaultdict(int)
-        self.xMap = defaultdict(set)
+        self.xSet = defaultdict(set)
         
-
     def add(self, point: list[int]) -> None:
-        tup = (point[0],point[1])
-        self.pointsCnt[tup] += 1
-        self.xMap[point[0]].add(point[1])
-
+        self.pointsCnt[(point[0],point[1])] += 1
+        self.xSet[point[0]].add(point[1])
 
     def count(self, point: list[int]) -> int:
         def countSquares(x, y1, y2):
@@ -26,8 +23,8 @@ class DetectSquares:
         
         cont = 0
         x, y1 = point
-        if x in self.xMap:
-            for y2 in self.xMap[x]:
+        if x in self.xSet:
+            for y2 in self.xSet[x]:
                 if y2 == y1:
                     continue
                 cont += countSquares(x,y1,y2)
