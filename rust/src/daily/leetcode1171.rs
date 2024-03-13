@@ -14,6 +14,8 @@ impl ListNode {
     }
 }
 
+use std::collections::HashSet;
+
 fn generate_list(nodes: Vec<i32>) -> Option<Box<ListNode>> {
     nodes
         .into_iter()
@@ -23,11 +25,27 @@ fn generate_list(nodes: Vec<i32>) -> Option<Box<ListNode>> {
 
 impl Solution {
     pub fn remove_zero_sum_sublists(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut stack = Vec::new();
+        let mut set = HashSet::from([0]);
+        let mut sum = 0;
+
         while let Some(n) = head {
+            stack.push(n.val);
+            sum += n.val;
+            if set.contains(&sum) {
+                let start = sum;
+                while let Some(x) = stack.pop() {
+                    set.remove(&sum);
+                    sum -= x;
+                    if sum == start {
+                        break;
+                    }
+                }
+            }
+            set.insert(sum);
             head = n.next;
         }
-
-        generate_list(vec![3, 1])
+        generate_list(stack)
     }
 }
 #[cfg(test)]
