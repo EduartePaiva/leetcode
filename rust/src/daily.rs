@@ -16,3 +16,4 @@ pub mod leetcode2540;
 pub mod leetcode2709;
 pub mod leetcode2864;
 pub mod leetcode3005;
+pub mod leetcode0238;
