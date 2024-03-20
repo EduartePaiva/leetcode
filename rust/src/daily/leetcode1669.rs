@@ -35,7 +35,7 @@ impl Solution {
             list_vec2.push(val.val);
             list2 = val.next;
         }
-        let _: Vec<_> = list_vec1.splice(a..b + 1, list_vec2).collect();
+        let _: Vec<_> = list_vec1.splice(a..b, list_vec2).collect();
         list_vec1
             .into_iter()
             .rev()
