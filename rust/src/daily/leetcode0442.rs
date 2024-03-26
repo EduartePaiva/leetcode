@@ -3,17 +3,19 @@ pub struct Solution;
 
 impl Solution {
     pub fn find_duplicates(mut nums: Vec<i32>) -> Vec<i32> {
-        let mut res = vec![];
-        for i in 0..nums.len() {
-            let cur = nums[i].abs() - 1;
-            let point_to = nums[cur as usize];
-            if point_to.is_negative() {
-                res.push(cur + 1);
-            } else {
-                nums[cur as usize] = -point_to;
-            }
-        }
-        res
+        (0..nums.len())
+            .filter_map(|i| {
+                let cur = nums[i].abs() - 1;
+                let point_to = nums[cur as usize];
+                match point_to.is_negative() {
+                    true => Some(cur + 1),
+                    false => {
+                        nums[cur as usize] = -point_to;
+                        None
+                    }
+                }
+            })
+            .collect()
     }
 }
 #[cfg(test)]
