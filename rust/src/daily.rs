@@ -1,4 +1,5 @@
 pub mod leetcode0019;
+pub mod leetcode0041;
 pub mod leetcode0057;
 pub mod leetcode0100;
 pub mod leetcode0143;
@@ -7,6 +8,7 @@ pub mod leetcode0234;
 pub mod leetcode0238;
 pub mod leetcode0287;
 pub mod leetcode0349;
+pub mod leetcode0442;
 pub mod leetcode0452;
 pub mod leetcode0525;
 pub mod leetcode0621;
@@ -26,4 +28,3 @@ pub mod leetcode2540;
 pub mod leetcode2709;
 pub mod leetcode2864;
 pub mod leetcode3005;
-pub mod leetcode0442;
