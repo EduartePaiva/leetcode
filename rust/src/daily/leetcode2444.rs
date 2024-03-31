@@ -3,69 +3,29 @@
 pub struct Solution;
 impl Solution {
     pub fn count_subarrays(nums: Vec<i32>, min_k: i32, max_k: i32) -> i64 {
-        // three pointers too
-        // I have to keep track of cur min and cur amx
-        // I have to keep track of count min_k and count max_k
-
+        let len = nums.len();
         let mut res = 0;
-        let mut cur_min = i32::MAX;
-        let mut cur_max = 0;
-        let mut cnt_min = 0;
-        let mut cnt_max = 0;
-        let mut near_l = 0;
         let mut far_l = 0;
+        let mut last_max_index = len;
+        let mut last_min_index = len;
 
-        for r in 0..nums.len() {
-            cur_min = cur_min.min(nums[r]);
-            cur_max = cur_max.max(nums[r]);
-            cnt_min += if nums[r] == min_k { 1 } else { 0 };
-            cnt_max += if nums[r] == max_k { 1 } else { 0 };
-            if nums[near_l] != min_k && nums[near_l] != max_k {
-                near_l += 1;
+        for r in 0..len {
+            if nums[r] == min_k {
+                last_min_index = r;
             }
-
-            if cur_min < min_k || cur_max > max_k {
-                //here I have to shift near_l and far_l
-                cur_min = i32::MAX;
-                cur_max = 0;
-                cnt_min = 0;
-                cnt_max = 0;
-                near_l = r + 1;
+            if nums[r] == max_k {
+                last_max_index = r;
+            }
+            if nums[r] < min_k || nums[r] > max_k {
+                last_max_index = len;
+                last_min_index = len;
                 far_l = r + 1;
             }
-
-            //how can I shift the near_l?
-            // the near_l have to be 1 step away from
-            // taking cnt_min or cnt_max
-            if cnt_min > 1 || cnt_max > 1 {
-                loop {
-                    let to_take = nums[near_l];
-                    let cnt = if to_take == max_k {
-                        &mut cnt_max
-                    } else {
-                        &mut cnt_min
-                    };
-                    //check if it can take
-                    if *cnt > 1 {
-                        // if took get 1 step away
-                        *cnt -= 1;
-                        near_l += 1;
-                        while near_l < r && nums[near_l] != min_k && nums[near_l] != max_k {
-                            near_l += 1;
-                        }
-                    } else {
-                        break;
-                    }
-                }
+            if last_max_index != len && last_min_index != len {
+                let near_l = last_max_index.min(last_min_index);
+                res += (near_l - far_l + 1) as i64;
             }
-            if cnt_min >= 1 && cnt_max >= 1 {
-                res += (near_l - far_l + 1) as i64
-            }
-            // println!(
-            //     "cnt_min: {cnt_min}, cnt_max: {cnt_max}, near_l: {near_l}, far_l: {far_l}, r: {r}, res: {res}"
-            // );
         }
-
         res
     }
 }
