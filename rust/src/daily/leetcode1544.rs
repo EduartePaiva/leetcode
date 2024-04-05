@@ -6,19 +6,13 @@ impl Solution {
 
         for c in s.chars() {
             if let Some(last) = stack.last() {
-                if last.to_ascii_lowercase() == c.to_ascii_lowercase()
-                    && ((last.is_ascii_uppercase() && c.is_ascii_lowercase())
-                        || (last.is_ascii_lowercase() && c.is_ascii_uppercase()))
-                {
+                if last.to_ascii_lowercase() == c.to_ascii_lowercase() && c != *last {
                     stack.pop();
-                } else {
-                    stack.push(c);
+                    continue;
                 }
-            } else {
-                stack.push(c);
             }
+            stack.push(c);
         }
-
         stack.into_iter().collect()
     }
 }
