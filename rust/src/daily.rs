@@ -4,6 +4,8 @@ pub mod leetcode0042;
 pub mod leetcode0057;
 pub mod leetcode0058;
 pub mod leetcode0079;
+pub mod leetcode0084;
+pub mod leetcode0085;
 pub mod leetcode0100;
 pub mod leetcode0143;
 pub mod leetcode0205;
