@@ -43,6 +43,7 @@ pub mod leetcode1614;
 pub mod leetcode1669;
 pub mod leetcode1700;
 pub mod leetcode1750;
+pub mod leetcode1992;
 pub mod leetcode2073;
 pub mod leetcode2092;
 pub mod leetcode2444;
