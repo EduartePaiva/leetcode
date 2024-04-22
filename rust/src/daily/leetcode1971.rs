@@ -8,10 +8,7 @@ impl Solution {
         if source == destination {
             return true;
         }
-        let mut nodes: HashMap<i32, Vec<i32>> = HashMap::new();
-        for i in 0..n {
-            nodes.insert(i as i32, vec![]);
-        }
+        let mut nodes: HashMap<i32, Vec<i32>> = (0..n).map(|x| (x, vec![])).collect();
         for edge in edges {
             let edg1 = edge[0];
             let edg2 = edge[1];
