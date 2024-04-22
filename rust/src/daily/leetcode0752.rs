@@ -1,8 +1,8 @@
 // 752. Open the Lock
 
-use std::collections::{HashSet, VecDeque};
-
 pub struct Solution;
+
+use std::collections::{HashSet, VecDeque};
 impl Solution {
     /// # Panics
     ///
@@ -13,8 +13,8 @@ impl Solution {
     /// // panics here
     /// Solution::turning_logic('A');
     /// ```
-    pub fn turning_logic(c: char) -> (char, char) {
-        match c {
+    pub fn turning_logic(digit: char) -> (char, char) {
+        match digit {
             '0' => ('1', '9'),
             '1' => ('0', '2'),
             '2' => ('1', '3'),
@@ -32,30 +32,66 @@ impl Solution {
     pub fn open_lock(deadends: Vec<String>, target: String) -> i32 {
         //vec of length 10000 vec 0 == 0000 vec 9999 = 9999, vec 1 == 0001,
         //so to wheel 1 is +1 wheel 01 is +10, 001 is +100, 0001 is +1000
-        let visited: HashSet<(char, char, char, char)> =
+        let mut visited: HashSet<[char; 4]> =
             HashSet::from_iter(deadends.into_iter().map(|digits| {
                 let mut iter = digits.chars();
-                (
+                [
                     iter.next().unwrap(),
                     iter.next().unwrap(),
                     iter.next().unwrap(),
                     iter.next().unwrap(),
-                )
+                ]
             }));
 
         // breath first search I want to get to 0000 from target
 
-        let mut q: VecDeque<(char, char, char, char)> = VecDeque::new();
-        q.push_back(target.chars().);
+        let mut q: VecDeque<[char; 4]> = VecDeque::new();
+
+        let mut target = target.chars();
+        let target = [
+            target.next().unwrap(),
+            target.next().unwrap(),
+            target.next().unwrap(),
+            target.next().unwrap(),
+        ];
+        q.push_back(target);
+
+        let mut steps = 0;
+        while !q.is_empty() {
+            for _ in 0..q.len() {
+                if let Some(mut cur_digits) = q.pop_front() {
+                    if cur_digits == ['0', '0', '0', '0'] {
+                        return steps;
+                    }
+                    for i in 0..4 {
+                        let digit = cur_digits[i];
+                        let possible_digits = Solution::turning_logic(digit);
+                        cur_digits[i] = possible_digits.0;
+
+                        if !visited.contains(&cur_digits) {
+                            q.push_back(cur_digits);
+                            visited.insert(cur_digits);
+                        }
+                        cur_digits[i] = possible_digits.1;
+                        if !visited.contains(&cur_digits) {
+                            q.push_back(cur_digits);
+                            visited.insert(cur_digits);
+                        }
+                        cur_digits[i] = digit;
+                    }
+                }
+            }
+            steps += 1;
+        }
 
         -1
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
-    #[ignore = "reason"]
     fn test1() {
         assert_eq!(
             Solution::open_lock(
@@ -69,6 +105,20 @@ mod tests {
                 "0202".to_string()
             ),
             6
+        );
+    }
+    #[test]
+    fn test2() {
+        assert_eq!(
+            Solution::open_lock(vec!["8888".to_string(),], "0009".to_string()),
+            1
+        );
+    }
+    #[test]
+    fn test3() {
+        assert_eq!(
+            Solution::open_lock(vec!["0000".to_string(),], "8888".to_string()),
+            -1
         );
     }
 }
