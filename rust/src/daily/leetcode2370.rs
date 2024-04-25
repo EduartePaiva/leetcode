@@ -3,11 +3,9 @@ pub struct Solution;
 
 impl Solution {
     pub fn longest_ideal_string(s: String, k: i32) -> i32 {
-        let s = s.as_bytes();
         let mut memo = [0_u32; 26];
 
-        for i in (0..s.len()).rev() {
-            let cur_c = (s[i] - b'a') as usize;
+        for cur_c in s.as_bytes().into_iter().rev().map(|c| (c - b'a') as usize) {
             let min_c = if cur_c as i32 - k >= 0 {
                 cur_c - k as usize
             } else {
