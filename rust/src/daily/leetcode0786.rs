@@ -12,7 +12,6 @@ impl Solution {
             }
         }
         fractions.sort_unstable_by(|a, b| (a.0 * b.1).cmp(&(a.1 * b.0)));
-        // println!("{:?}", fractions);
         Vec::from([fractions[(k - 1) as usize].0, fractions[(k - 1) as usize].1])
     }
 }
