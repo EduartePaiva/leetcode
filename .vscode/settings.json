@@ -1,11 +1,5 @@
 {
-  "cSpell.enabled": true,
-  "cSpell.words": [
-    "deadend",
-    "subarrays",
-    "deadend",
-    "subarrays",
-    "tribonacci"
-  ],
-  "rust-analyzer.linkedProjects": ["./rust/Cargo.toml"]
+    "cSpell.enabled": true,
+    "cSpell.words": ["deadend", "stretchr", "subarrays", "tribonacci"],
+    "rust-analyzer.linkedProjects": ["./rust/Cargo.toml"]
 }
