@@ -7,7 +7,8 @@ impl Solution {
     pub fn maximum_safeness_factor(mut grid: Vec<Vec<i32>>) -> i32 {
         // find the thieves
         // do a bfs in the grid from the thieves
-        // it can either go to right, or down, it'll prioritize the safest option.
+        // it can either go to right, or down or up or left.
+        // dijkstra
         // return the min value found - 1
 
         let mut thieves: Vec<[usize; 2]> = vec![];
@@ -47,11 +48,49 @@ impl Solution {
             }
         }
 
-        for i in 0..grid.len() {
-            println!("{:?}", grid[i]);
+        let mut adj = vec![vec![1; grid.len()]; grid.len()];
+        let mut deque: VecDeque<(usize, usize, i32)> = VecDeque::new();
+        deque.push_back((0, 0, grid[0][0]));
+        adj[0][0] = grid[0][0];
+
+        while !deque.is_empty() {
+            for _ in 0..deque.len() {
+                let (r, c, prev_factor) = deque.pop_front().unwrap();
+                if grid[r][c] == 1 {
+                    continue;
+                }
+                if r + 1 < grid.len() {
+                    let new_factor = prev_factor.min(grid[r + 1][c]);
+                    if adj[r + 1][c] < new_factor {
+                        adj[r + 1][c] = new_factor;
+                        deque.push_back((r + 1, c, new_factor));
+                    }
+                }
+                if c + 1 < grid.len() {
+                    let new_factor = prev_factor.min(grid[r][c + 1]);
+                    if adj[r][c + 1] < new_factor {
+                        adj[r][c + 1] = new_factor;
+                        deque.push_back((r, c + 1, new_factor));
+                    }
+                }
+                if r > 0 {
+                    let new_factor = prev_factor.min(grid[r - 1][c]);
+                    if adj[r - 1][c] < new_factor {
+                        adj[r - 1][c] = new_factor;
+                        deque.push_back((r - 1, c, new_factor));
+                    }
+                }
+                if c > 0 {
+                    let new_factor = prev_factor.min(grid[r][c - 1]);
+                    if adj[r][c - 1] < new_factor {
+                        adj[r][c - 1] = new_factor;
+                        deque.push_back((r, c - 1, new_factor));
+                    }
+                }
+            }
         }
 
-        -1
+        adj[grid.len() - 1][grid.len() - 1] - 1
     }
 }
 
@@ -69,6 +108,54 @@ mod tests {
     fn test2() {
         assert_eq!(
             Solution::maximum_safeness_factor(vec![vec![0, 0, 1], vec![0, 0, 0], vec![0, 0, 0]]),
+            2
+        );
+    }
+    #[test]
+    fn test3() {
+        assert_eq!(
+            Solution::maximum_safeness_factor(vec![vec![1, 1, 1], vec![1, 1, 1], vec![1, 0, 0]]),
+            0
+        );
+    }
+    #[test]
+    fn test4() {
+        assert_eq!(
+            Solution::maximum_safeness_factor(vec![vec![1, 1, 1], vec![0, 1, 1], vec![0, 0, 0]]),
+            0
+        );
+    }
+    #[test]
+    fn test5() {
+        assert_eq!(
+            Solution::maximum_safeness_factor(vec![
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                vec![0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+                vec![0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                vec![0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                vec![0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+            ]),
             2
         );
     }
