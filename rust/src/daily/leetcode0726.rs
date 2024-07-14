@@ -11,20 +11,17 @@ struct Atom {
 #[derive(Debug)]
 enum FormulaPiece {
     Atom(Atom),
-    Number(i32),
     OpenParenthesis,
-    CloseParenthesis,
+    CloseParenthesis(i32),
 }
+use std::collections::HashMap;
 use FormulaPiece::*;
 
 impl Solution {
     pub fn count_of_atoms(formula: String) -> String {
-        // first thing to solve is nesting
         let mut new_formula: Vec<FormulaPiece> = vec![];
-
         let mut prev_nums: Vec<i32> = vec![];
         let mut prev_letters: Vec<char> = vec![];
-        println!("{formula}");
 
         fn insert_atom(
             new_formula: &mut Vec<FormulaPiece>,
@@ -43,10 +40,13 @@ impl Solution {
                 prev_nums.clear();
             }
             if prev_nums.len() > 0 {
-                new_formula.push(Number(
-                    prev_nums.iter().fold(0, |prev, cur| prev * 10 + cur),
-                ));
-                prev_nums.clear();
+                if let Some(CloseParenthesis(_)) = new_formula.last() {
+                    new_formula.pop();
+                    new_formula.push(CloseParenthesis(
+                        prev_nums.iter().fold(0, |prev, cur| prev * 10 + cur),
+                    ));
+                    prev_nums.clear();
+                }
             }
         }
 
@@ -58,7 +58,7 @@ impl Solution {
                 }
                 ')' => {
                     insert_atom(&mut new_formula, &mut prev_nums, &mut prev_letters);
-                    new_formula.push(CloseParenthesis);
+                    new_formula.push(CloseParenthesis(1));
                 }
                 '0'..='9' => prev_nums.push(c.to_digit(10).unwrap() as i32),
                 'A'..='Z' => {
@@ -71,9 +71,42 @@ impl Solution {
             }
         }
         insert_atom(&mut new_formula, &mut prev_nums, &mut prev_letters);
-        println!("{:?}", new_formula);
-
-        String::from("value")
+        let mut stack: Vec<FormulaPiece> = vec![];
+        for form in new_formula {
+            if let CloseParenthesis(num) = form {
+                let mut new_stack = vec![];
+                while let Some(f) = stack.pop() {
+                    match f {
+                        OpenParenthesis => break,
+                        Atom(Atom { quantity, symbol }) => new_stack.push(Atom(Atom {
+                            quantity: quantity * num,
+                            symbol,
+                        })),
+                        _ => panic!("should not happen"),
+                    }
+                }
+                stack.extend(new_stack.into_iter());
+            } else {
+                stack.push(form);
+            }
+        }
+        let mut map: HashMap<String, i32> = HashMap::new();
+        for atm in stack {
+            if let Atom(Atom { quantity, symbol }) = atm {
+                *map.entry(symbol).or_insert(0) += quantity;
+            }
+        }
+        let mut tup_elements: Vec<_> = map.into_iter().collect();
+        tup_elements.sort_unstable();
+        tup_elements
+            .into_iter()
+            .map(|(mut key, qtd)| {
+                if qtd > 1 {
+                    key.push_str(qtd.to_string().as_str());
+                }
+                key
+            })
+            .collect()
     }
 }
 
