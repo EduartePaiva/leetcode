@@ -11,6 +11,7 @@ struct Node {
 
 impl Solution {
     pub fn find_the_city(n: i32, edges: Vec<Vec<i32>>, distance_threshold: i32) -> i32 {
+        // do a better dikstra
         // I have to run a dfs from each edge
         // let's trust the input
         let mut map: Vec<Vec<Node>> = vec![vec![]; n as usize];
@@ -23,40 +24,31 @@ impl Solution {
         }
 
         fn get_num_neighbors(
-            visited: &mut Vec<bool>,
+            threshold_left: &mut Vec<i32>,
             dist_left: i32,
             node: usize,
             map: &Vec<Vec<Node>>,
         ) -> i32 {
-            if dist_left < 0 || visited[node] {
+            if dist_left < 0 || threshold_left[node] > dist_left {
                 return 0;
             }
-            visited[node] = true;
-            // println!("city: {node}");
-            let neis = &map[node];
-            let mut res = 0;
-            for n in neis {
-                if visited[n.dest] {
-                    continue;
-                }
-                res += get_num_neighbors(visited, dist_left - n.weight, n.dest, map);
+            let mut res = if threshold_left[node] == 0 { 1 } else { 0 };
+            threshold_left[node] = dist_left + 1;
+            let nei = &map[node];
+            for n in nei {
+                res += get_num_neighbors(threshold_left, dist_left - n.weight, n.dest, map);
             }
-
-            res + 1
+            res
         }
 
         let mut nodes_neighbors = vec![n; n as usize];
 
         for i in 0..n as usize {
-            // println!("----------------");
-            let mut visited: Vec<bool> = vec![false; n as usize];
+            let mut visited: Vec<i32> = vec![0; n as usize];
             nodes_neighbors[i] = get_num_neighbors(&mut visited, distance_threshold, i, &map);
         }
-
         let mut res = n - 1;
         let mut min_nei = i32::MAX;
-        // println!("{:?}", nodes_neighbors);
-
         for i in (0..n as usize).rev() {
             if nodes_neighbors[i] < min_nei {
                 min_nei = nodes_neighbors[i];
@@ -83,14 +75,21 @@ mod tests {
         )
     }
     #[test]
-    fn test1() {
+    fn test2() {
         assert_eq!(
             Solution::find_the_city(
-                4,
-                vec![vec![0, 1, 3], vec![1, 2, 1], vec![1, 3, 4], vec![2, 3, 1]],
-                4
+                6,
+                vec![
+                    vec![0, 1, 10],
+                    vec![0, 2, 1],
+                    vec![2, 3, 1],
+                    vec![1, 3, 1],
+                    vec![1, 4, 1],
+                    vec![4, 5, 10]
+                ],
+                20
             ),
-            3
+            5
         )
     }
 }
