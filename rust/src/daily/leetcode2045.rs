@@ -1,66 +1,48 @@
 // 2045. Second Minimum Time to Reach Destination
 pub struct Solution;
 
-use std::{
-    cmp::Reverse,
-    collections::{BinaryHeap, HashMap},
-    i32,
-};
+use std::collections::{HashMap, VecDeque};
 impl Solution {
     pub fn second_minimum(n: i32, edges: Vec<Vec<i32>>, time: i32, change: i32) -> i32 {
-        // do the shortest path.
-        // if it don't find a
-        // it can be 1 extra move or two
-        // two will happen if one extra move don't happen
-
-        //ditch dijkstra for bfs
-
-        // let's do normal shortest path.
         let mut map: HashMap<i32, Vec<i32>> = HashMap::new();
         for edge in edges {
             map.entry(edge[0]).or_insert(Vec::new()).push(edge[1]);
             map.entry(edge[1]).or_insert(Vec::new()).push(edge[0]);
         }
+        let mut res = -1;
+        let mut q: VecDeque<i32> = VecDeque::new();
+        let mut cur_time = 0;
+        let mut visit: HashMap<i32, [i32; 2]> = HashMap::new();
+        q.push_back(1);
 
-        let mut paths: Vec<i32> = vec![];
-        // start from 1 until n
-        heap.push((Reverse(0), 1));
-        cache.insert(1, 0);
-
-        println!("{:?}", cache);
-        println!("{:?}", map);
-        while let Some((Reverse(time_vertex), vertex)) = heap.pop() {
-            // check if it's green or red now.
-
-            // println!("foi aqui??????????????????, {vertex}");
-            if let Some(neighbors) = map.get(&vertex) {
-                println!("{:?}", neighbors);
-                for &nei in neighbors {
-                    let new_time = time_vertex + time;
-                    if nei == n {
-                        paths.push(new_time);
-                        paths.sort();
-                        if paths.len() > 2 {
-                            paths.pop();
-                        }
+        while !q.is_empty() {
+            for _ in 0..q.len() {
+                let node = q.pop_front().unwrap();
+                if node == n {
+                    if res != -1 {
+                        return cur_time;
                     }
-                    if *cache.entry(nei).or_insert(i32::MAX) < (time_vertex + time) {
+                    res = cur_time;
+                }
+                for &nei in map.get(&node).unwrap() {
+                    let nei_times = visit.entry(nei).or_insert([-1, -1]);
+                    if nei_times[0] == -1 {
+                        nei_times[0] = cur_time;
+                        q.push_back(nei);
                         continue;
                     }
-                    cache.insert(nei, new_time);
-                    // 1 signifies that is red.
-                    if (new_time / change) % 2 == 1 {
-                        heap.push((Reverse(new_time + (change - (new_time % change))), nei));
-                        continue;
+                    if nei_times[1] == -1 && nei_times[0] != cur_time {
+                        nei_times[1] = cur_time;
+                        q.push_back(nei);
                     }
-
-                    heap.push((Reverse(new_time), nei));
                 }
             }
+            if (cur_time / change) % 2 == 1 {
+                cur_time += change - (cur_time % change);
+            }
+            cur_time += time;
         }
-        println!("cache: {:?}", cache);
 
-        println!("{:?}", paths);
         0
     }
 }
@@ -79,5 +61,9 @@ mod tests {
             ),
             13
         );
+    }
+    #[test]
+    fn test2() {
+        assert_eq!(Solution::second_minimum(2, vec![vec![1, 2]], 3, 2), 11);
     }
 }
