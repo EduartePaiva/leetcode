@@ -123,6 +123,7 @@ pub mod leetcode2058;
 pub mod leetcode2073;
 pub mod leetcode2092;
 pub mod leetcode2096;
+pub mod leetcode2134;
 pub mod leetcode2181;
 pub mod leetcode2191;
 pub mod leetcode2192;
