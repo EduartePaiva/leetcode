@@ -7,9 +7,8 @@ impl Solution {
         if num == 0 {
             return "Zero".to_string();
         }
-
         let words = HashMap::from([
-            (0, "Zero"),
+            (0, ""),
             (1, "One"),
             (2, "Two"),
             (3, "Three"),
@@ -37,23 +36,13 @@ impl Solution {
             (70, "Seventy"),
             (80, "Eighty"),
             (90, "Ninety"),
-            (100, "Hundred"),
-            (1000, "Thousand"),
-            (1000000, "Million"),
         ]);
 
         fn get_hundred(number: i32, words: &HashMap<i32, &str>) -> String {
+            if let Some(&word) = words.get(&number) {
+                return String::from(word);
+            }
             match number {
-                0 => String::from(""),
-                1..=19 => String::from(*words.get(&number).unwrap()),
-                20 => String::from(*words.get(&number).unwrap()),
-                30 => String::from(*words.get(&number).unwrap()),
-                40 => String::from(*words.get(&number).unwrap()),
-                50 => String::from(*words.get(&number).unwrap()),
-                60 => String::from(*words.get(&number).unwrap()),
-                70 => String::from(*words.get(&number).unwrap()),
-                80 => String::from(*words.get(&number).unwrap()),
-                90 => String::from(*words.get(&number).unwrap()),
                 21..=99 => String::from_iter([
                     get_hundred((number / 10) * 10, words),
                     " ".to_string(),
@@ -81,7 +70,6 @@ impl Solution {
             res.push_str(str_result.as_str());
             res.push_str(" Billion");
         }
-        // println!("{left}, {str_result}, {res}");
         //convert million
         let left = num / 1000000;
         num %= 1000000;
@@ -93,7 +81,6 @@ impl Solution {
             res.push_str(str_result.as_str());
             res.push_str(" Million");
         }
-        // println!("{left}, {str_result}, {res}");
         //convert thousands
         let left = num / 1000;
         num %= 1000;
@@ -105,7 +92,6 @@ impl Solution {
             res.push_str(str_result.as_str());
             res.push_str(" Thousand");
         }
-        // println!("{left}, {str_result}, {res}");
         //convert hundreds
         let str_result = get_hundred(num, &words);
         if str_result.len() > 0 {
@@ -114,8 +100,6 @@ impl Solution {
             }
             res.push_str(str_result.as_str());
         }
-        // println!("{num}, {str_result}, {res}");
-
         res
     }
 }
