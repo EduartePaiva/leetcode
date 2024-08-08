@@ -1,78 +1,28 @@
 // 885. Spiral Matrix III
 pub struct Solution;
 
-enum Direction {
-    North,
-    South,
-    West,
-    East,
-}
-
-use Direction::*;
-
 impl Solution {
     pub fn spiral_matrix_iii(rows: i32, cols: i32, r_start: i32, c_start: i32) -> Vec<Vec<i32>> {
         let matrix_size = (rows * cols) as usize;
+        let directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
         let mut res = vec![];
-
-        let mut r_pos = r_start;
-        let mut c_pos = c_start;
-        let mut dir = East;
-        let mut step = 1;
+        let mut r = r_start;
+        let mut c = c_start;
+        let mut steps = 1;
+        let mut i = 0;
         while res.len() < matrix_size {
             for _ in 0..2 {
-                match dir {
-                    East => {
-                        if r_pos < rows && r_pos >= 0 {
-                            for c in c_pos..c_pos + step {
-                                if c >= 0 && c < cols {
-                                    res.push(vec![r_pos, c]);
-                                }
-                            }
-                        }
-                        c_pos = c_pos + step;
-                        dir = South;
+                let [dr, dc] = directions[i];
+                for _ in 0..steps {
+                    if r >= 0 && c >= 0 && r < rows && c < cols {
+                        res.push(vec![r, c]);
                     }
-                    South => {
-                        if c_pos < cols && c_pos >= 0 {
-                            for r in r_pos..r_pos + step {
-                                if r >= 0 && r < rows {
-                                    res.push(vec![r, c_pos]);
-                                }
-                            }
-                        }
-                        r_pos = r_pos + step;
-                        dir = West;
-                    }
-                    West => {
-                        if r_pos < rows && r_pos >= 0 {
-                            for c in (c_pos - step + 1..=c_pos).rev() {
-                                if c >= 0 && c < cols {
-                                    res.push(vec![r_pos, c]);
-                                }
-                            }
-                        }
-                        c_pos = c_pos - step;
-                        dir = North;
-                    }
-                    North => {
-                        if c_pos < cols && c_pos >= 0 {
-                            let start = if r_pos - step + 1 > 0 {
-                                r_pos - step + 1
-                            } else {
-                                0
-                            };
-                            let end = if r_pos < rows { r_pos } else { rows - 1 };
-                            for r in (start..=end).rev() {
-                                res.push(vec![r, c_pos]);
-                            }
-                        }
-                        r_pos = r_pos - step;
-                        dir = East;
-                    }
+                    r += dr;
+                    c += dc;
                 }
+                i = (i + 1) % 4;
             }
-            step += 1;
+            steps += 1;
         }
         res
     }
