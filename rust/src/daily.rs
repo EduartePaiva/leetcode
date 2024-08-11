@@ -104,6 +104,7 @@ pub mod leetcode1544;
 pub mod leetcode1550;
 pub mod leetcode1552;
 pub mod leetcode1579;
+pub mod leetcode1596;
 pub mod leetcode1598;
 pub mod leetcode1605;
 pub mod leetcode1608;
