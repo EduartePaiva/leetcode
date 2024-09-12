@@ -1,6 +1,7 @@
 // 287. Find the Duplicate Number
 
 pub struct Solution;
+
 impl Solution {
     pub fn find_duplicate(nums: Vec<i32>) -> i32 {
         let mut turtle = nums[0];
@@ -21,6 +22,7 @@ impl Solution {
         turtle
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
