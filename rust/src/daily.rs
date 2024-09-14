@@ -170,6 +170,7 @@ pub mod leetcode2370;
 pub mod leetcode2373;
 pub mod leetcode2392;
 pub mod leetcode2418;
+pub mod leetcode2419;
 pub mod leetcode2441;
 pub mod leetcode2444;
 pub mod leetcode2485;
