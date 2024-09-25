@@ -28,12 +28,16 @@ impl Trie {
         head.num_words += 1;
     }
 
-    fn reach_dest(cur_trie: &Trie, dest: usize) -> Option<&Box<Trie>> {
-        cur_trie.children[dest].as_ref()
-    }
+    fn get_score(&self, word: String) -> i32 {
+        let mut head = self;
+        let mut res = 0;
+        for c in word.bytes() {
+            let i = (c - b'a') as usize;
+            head = head.children[i].as_ref().unwrap();
+            res += head.num_words;
+        }
 
-    fn count_words(cur_trie: &Trie) -> i32 {
-        cur_trie.num_words
+        res
     }
 }
 
@@ -44,19 +48,8 @@ impl Solution {
         for w in &words {
             trie.insert(w.as_bytes());
         }
-
         for word in words {
-            let mut cur_trie = &trie;
-            let mut cur_word_res = 0;
-            for c in word.bytes() {
-                if let Some(next_trie) = Trie::reach_dest(cur_trie, (c - b'a') as usize) {
-                    cur_trie = next_trie;
-                    cur_word_res += Trie::count_words(cur_trie);
-                } else {
-                    break;
-                }
-            }
-            res.push(cur_word_res);
+            res.push(trie.get_score(word));
         }
         res
     }
