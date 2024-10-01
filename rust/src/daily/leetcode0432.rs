@@ -1,5 +1,6 @@
 //All O`one Data Structure
 
+#![allow(unused)]
 use std::collections::HashMap;
 struct AllOne {
     mapping: HashMap<String, i32>,

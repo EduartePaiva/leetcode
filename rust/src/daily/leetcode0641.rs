@@ -1,5 +1,6 @@
 // 641. Design Circular Deque
 
+#![allow(unused)]
 use std::collections::VecDeque;
 struct MyCircularDeque {
     deq: VecDeque<i32>,
