@@ -163,6 +163,7 @@ pub mod leetcode1905;
 pub mod leetcode1915;
 pub mod leetcode1937;
 pub mod leetcode1945;
+pub mod leetcode1963;
 pub mod leetcode1971;
 pub mod leetcode1992;
 pub mod leetcode2000;
