@@ -8,13 +8,10 @@ impl Solution {
             return false;
         }
         for i in 0..sentence.len() {
-            if sentence[i] == b' ' {
-                if sentence[i - 1] != sentence[i + 1] {
-                    return false;
-                }
+            if sentence[i] == b' ' && sentence[i - 1] != sentence[i + 1] {
+                return false;
             }
         }
-
         true
     }
 }
