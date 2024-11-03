@@ -76,6 +76,7 @@ pub mod leetcode0752;
 pub mod leetcode0786;
 pub mod leetcode0787;
 pub mod leetcode0791;
+pub mod leetcode0796;
 pub mod leetcode0826;
 pub mod leetcode0834;
 pub mod leetcode0840;
