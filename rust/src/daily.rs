@@ -171,6 +171,7 @@ pub mod leetcode1750;
 pub mod leetcode1791;
 pub mod leetcode1813;
 pub mod leetcode1823;
+pub mod leetcode1829;
 pub mod leetcode1863;
 pub mod leetcode1894;
 pub mod leetcode1905;
