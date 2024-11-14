@@ -5,7 +5,7 @@ impl Solution {
     pub fn minimized_maximum(n: i32, quantities: Vec<i32>) -> i32 {
         let sum: i64 = quantities.iter().map(|v| *v as i64).sum();
         let mut min = (sum / n as i64) as i32 + if sum % n as i64 != 0 { 1 } else { 0 };
-        let mut max = min * 2;
+        let mut max = i32::MAX;
 
         while min <= max {
             let mid = (max - min) / 2 + min;
