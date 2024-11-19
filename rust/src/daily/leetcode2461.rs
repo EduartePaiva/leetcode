@@ -18,15 +18,15 @@ impl Solution {
             max_sum = max_sum.max(cur_sum);
         }
 
-        for i in 1..nums.len() - k + 1 {
-            cur_sum -= nums[i - 1] as i64;
-            let to_decrease = nums_cnt.entry(nums[i - 1]).or_insert(1);
+        for i in k..nums.len() {
+            cur_sum -= nums[i - k] as i64;
+            let to_decrease = nums_cnt.entry(nums[i - k]).or_insert(1);
             *to_decrease -= 1;
             if to_decrease == &0 {
-                nums_cnt.remove(&nums[i - 1]);
+                nums_cnt.remove(&nums[i - k]);
             }
-            cur_sum += nums[i + k - 1] as i64;
-            *nums_cnt.entry(nums[i + k - 1]).or_insert(0) += 1;
+            cur_sum += nums[i] as i64;
+            *nums_cnt.entry(nums[i]).or_insert(0) += 1;
             if nums_cnt.len() == k {
                 max_sum = max_sum.max(cur_sum);
             }
