@@ -205,6 +205,7 @@ pub mod leetcode2191;
 pub mod leetcode2192;
 pub mod leetcode2196;
 pub mod leetcode2220;
+pub mod leetcode2257;
 pub mod leetcode2275;
 pub mod leetcode2285;
 pub mod leetcode2326;
