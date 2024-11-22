@@ -109,6 +109,7 @@ pub mod leetcode1002;
 pub mod leetcode1038;
 pub mod leetcode1051;
 pub mod leetcode1052;
+pub mod leetcode1072;
 pub mod leetcode1105;
 pub mod leetcode1106;
 pub mod leetcode1110;
