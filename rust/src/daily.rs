@@ -187,6 +187,7 @@ pub mod leetcode1945;
 pub mod leetcode1957;
 pub mod leetcode1963;
 pub mod leetcode1971;
+pub mod leetcode1975;
 pub mod leetcode1992;
 pub mod leetcode2000;
 pub mod leetcode2022;
