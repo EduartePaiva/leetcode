@@ -10,7 +10,7 @@ impl Solution {
             nodes[i].push(i + 1);
         }
 
-        let mut dp = vec![usize::MAX; nodes.len()];
+        let mut dp: Vec<usize> = (0..nodes.len()).rev().collect();
         dp[nodes.len() - 1] = 0;
         fn shortest_dist(nodes: &Vec<Vec<usize>>, dp: &mut Vec<usize>, end: usize) -> i32 {
             for i in (0..=end).rev() {
@@ -20,7 +20,6 @@ impl Solution {
             }
             dp[0] as i32
         }
-        shortest_dist(&nodes, &mut dp, nodes.len() - 2);
         for query in queries {
             let from = query[0] as usize;
             let to = query[1] as usize;
