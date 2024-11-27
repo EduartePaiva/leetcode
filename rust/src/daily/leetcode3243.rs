@@ -10,21 +10,22 @@ impl Solution {
             nodes[i].push(i + 1);
         }
 
-        fn shortest_dist(nodes: &Vec<Vec<usize>>) -> i32 {
-            let mut dp = vec![usize::MAX; nodes.len()];
-            dp[nodes.len() - 1] = 0;
-            for i in (0..nodes.len() - 1).rev() {
+        let mut dp = vec![usize::MAX; nodes.len()];
+        dp[nodes.len() - 1] = 0;
+        fn shortest_dist(nodes: &Vec<Vec<usize>>, dp: &mut Vec<usize>, end: usize) -> i32 {
+            for i in (0..=end).rev() {
                 for &to in &nodes[i] {
                     dp[i] = dp[i].min(dp[to] + 1);
                 }
             }
             dp[0] as i32
         }
+        shortest_dist(&nodes, &mut dp, nodes.len() - 2);
         for query in queries {
             let from = query[0] as usize;
             let to = query[1] as usize;
             nodes[from].push(to);
-            res.push(shortest_dist(&nodes));
+            res.push(shortest_dist(&nodes, &mut dp, from));
         }
 
         res
