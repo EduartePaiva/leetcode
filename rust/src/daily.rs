@@ -270,4 +270,5 @@ pub mod leetcode3110;
 pub mod leetcode3133;
 pub mod leetcode3163;
 pub mod leetcode3217;
+pub mod leetcode3243;
 pub mod leetcode3254;
