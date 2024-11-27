@@ -11,7 +11,6 @@ impl Solution {
         }
 
         let mut dp: Vec<usize> = (0..nodes.len()).rev().collect();
-        dp[nodes.len() - 1] = 0;
         fn shortest_dist(nodes: &Vec<Vec<usize>>, dp: &mut Vec<usize>, end: usize) -> i32 {
             for i in (0..=end).rev() {
                 for &to in &nodes[i] {
