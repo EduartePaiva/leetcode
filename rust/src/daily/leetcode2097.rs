@@ -28,10 +28,6 @@ impl Solution {
             }
         }
         dfs(last, &mut nodes, &mut res);
-        // println!("{:?}, starting_node: {starting_node}", nodes_degree);
-        // println!("res: {:?}", res);
-
-        // now build the answer
         res
     }
 }
